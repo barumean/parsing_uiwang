@@ -1,0 +1,55 @@
+name: Check Uiwang Announcements
+
+on:
+  schedule:
+    # 02:00 UTC = 11:00 KST (UTC+9), weekdays only
+    - cron: "0 2 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      force_notify:
+        description: "Force notifications even on first run (for testing)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    name: Check for new announcements
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run announcement checker
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python checker.py
+
+      - name: Commit updated state file
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add seen_announcements.json
+          if git diff --cached --quiet; then
+            echo "No changes to seen_announcements.json — skipping commit."
+          else
+            git commit -m "chore: update seen announcements [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
