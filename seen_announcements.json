@@ -1,4 +1,4 @@
 {
-  "last_seen_ids": [],
-  "last_check": null
+  "last_seen_ids": ["test_fake_id_000"],
+  "last_check": "2026-04-21T00:00:00+00:00"
 }
