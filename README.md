@@ -18,7 +18,7 @@
 └── .github/workflows/check_announcements.yml  # GitHub Actions 스케줄 설정
 ```
 
-## 초기 세팅
+## 초기 세팅 (최초 1회)
 
 ### 1. 텔레그램 봇 준비
 1. Telegram에서 `@BotFather`에게 `/newbot` 으로 봇 생성 후 토큰 발급
@@ -38,3 +38,27 @@
 
 ### 3. 동작 확인
 Actions 탭 → **Check Uiwang Announcements** → **Run workflow** 로 수동 실행 가능
+
+---
+
+## 이 저장소를 가져다 쓰는 방법
+
+### 1단계 - 저장소 Fork
+GitHub 저장소 우측 상단 **Fork** 버튼 클릭 → 본인 계정으로 복사
+
+### 2단계 - Actions 활성화
+Fork한 저장소에서 **Actions 탭** 클릭 → **"I understand my workflows, enable them"** 버튼 클릭
+> Fork된 저장소는 기본적으로 Actions가 비활성화되어 있습니다.
+
+### 3단계 - 텔레그램 봇 준비
+위의 [텔레그램 봇 준비](#1-텔레그램-봇-준비) 항목 참고하여 본인의 봇 토큰과 Chat ID 준비
+
+### 4단계 - Secrets 등록
+Fork한 **본인 저장소**의 **Settings → Secrets and variables → Actions** 에서 등록
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+
+### 5단계 - 첫 실행
+Actions 탭 → **Check Uiwang Announcements** → **Run workflow** 클릭
+- 첫 실행은 현재 공지 목록을 저장만 하고 알림은 보내지 않습니다.
+- 이후 새 공지가 올라올 때마다 텔레그램으로 알림이 옵니다.
